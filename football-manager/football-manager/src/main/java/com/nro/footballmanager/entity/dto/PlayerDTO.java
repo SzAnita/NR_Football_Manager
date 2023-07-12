@@ -1,31 +1,26 @@
 package com.nro.footballmanager.entity.dto;
 
 import com.nro.footballmanager.entity.Player;
-import com.nro.footballmanager.entity.Team;
 import com.nro.footballmanager.entity.enums.RoleEnum;
-import com.nro.footballmanager.repository.TeamRepository;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Objects;
 
 @Data
 public class PlayerDTO {
+    private Long id;
     private String name;
     private int goalsScored;
     private RoleEnum role;
-    private Long teamId;
+    private TeamDTO team;
 
     public static PlayerDTO EntityToPlayerDTO(Player p) {
         PlayerDTO playerDTO = new PlayerDTO();
+        playerDTO.setId(p.getId());
         playerDTO.setName(p.getName());
         playerDTO.setGoalsScored(p.getGoalsScored());
         playerDTO.setRole(p.getRole());
-        if(Objects.nonNull(p.getTeam()) && p.getTeam().getId()>0) {
-            playerDTO.setTeamId(p.getTeam().getId());
-        } else {
-            playerDTO.setTeamId(0L);
-        }
+        playerDTO.setTeam(TeamDTO.EntityToTeamDTO(p.getTeam()));
         return playerDTO;
     }
     public static Player EntityFromPlayerDTO(PlayerDTO playerDTO) {
@@ -33,6 +28,7 @@ public class PlayerDTO {
         player.setName(playerDTO.getName());
         player.setGoalsScored(playerDTO.getGoalsScored());
         player.setRole(playerDTO.getRole());
+        player.setTeam(TeamDTO.EntityFromTeamDTO(playerDTO.getTeam()));
         return player;
     }
 }

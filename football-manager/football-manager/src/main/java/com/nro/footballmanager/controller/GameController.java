@@ -17,32 +17,31 @@ public class GameController {
     private GameService gameService;
 
     @PostMapping("/games")
-    public ResponseEntity<Game> saveGame(@RequestBody Game game) {
+    public ResponseEntity<GameDTO> saveGame(@RequestBody Game game) {
         return new ResponseEntity<>(gameService.saveGame(game), HttpStatus.OK);
     }
 
     @GetMapping("/games")
-    public ResponseEntity<List<Game>> getGames() {
+    public ResponseEntity<List<GameDTO>> getGames() {
         return new ResponseEntity<>(gameService.findAll(), HttpStatus.OK);
     }
     @GetMapping("/games/{id}")
-    public ResponseEntity<Game> getGameById(@PathVariable("id") Long id) {
+    public ResponseEntity<GameDTO> getGameById(@PathVariable("id") Long id) {
         Optional<Game> g = gameService.findGameById(id);
         if(g.isPresent()) {
-            return new ResponseEntity<>(g.get(), HttpStatus.OK);
+            return new ResponseEntity<>(GameDTO.EntityToDTO(g.get()), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PutMapping("/games/{id}")
-    public ResponseEntity<GameDTO> updateGame(@RequestBody GameDTO game, @PathVariable("id") Long id) {
+    public ResponseEntity<GameDTO> updateGame(@RequestBody Game game, @PathVariable("id") Long id) {
         Optional<Game> g = gameService.findGameById(id);
         if(g.isPresent()) {
             GameDTO persistedGame = gameService.updateGame(game, id);
             return new ResponseEntity<>(persistedGame, HttpStatus.OK);
         }
-        Game new_ = gameService.saveGame(GameDTO.EntityFromGameDTO(game));
-        return new ResponseEntity<>(GameDTO.EntityToGameDTO(new_), HttpStatus.OK);
+        return new ResponseEntity<>(gameService.saveGame(game), HttpStatus.OK);
     }
 
     @DeleteMapping("/games/{id}")

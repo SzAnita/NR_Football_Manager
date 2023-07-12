@@ -1,6 +1,7 @@
 package com.nro.footballmanager.controller;
 
 import com.nro.footballmanager.entity.Stadium;
+import com.nro.footballmanager.entity.dto.StadiumDTO;
 import com.nro.footballmanager.service.StadiumService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,29 +17,29 @@ public class StadiumController {
     private StadiumService stadiumService;
 
     @PostMapping("/stadiums")
-    public ResponseEntity<Stadium> saveStadium(@RequestBody Stadium s) {
+    public ResponseEntity<StadiumDTO> saveStadium(@RequestBody Stadium s) {
         return new ResponseEntity<>(stadiumService.saveStadium(s), HttpStatus.OK);
     }
 
     @GetMapping("/stadiums")
-    public ResponseEntity<List<Stadium>> getStadiums() {
+    public ResponseEntity<List<StadiumDTO>> getStadiums() {
         return new ResponseEntity<>(stadiumService.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/stadiums/{id}")
-    public ResponseEntity<Stadium> getStadiumById(@PathVariable("id") Long id) {
+    public ResponseEntity<StadiumDTO> getStadiumById(@PathVariable("id") Long id) {
         Optional<Stadium> s = stadiumService.findStadiumById(id);
         if(s.isPresent()) {
-            return new ResponseEntity<>(s.get(),HttpStatus.OK);
+            return new ResponseEntity<>(StadiumDTO.EntityToDTO(s.get()),HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PutMapping("/stadiums/{id}")
-    public ResponseEntity<Stadium> updateStadium(@RequestBody Stadium s, @PathVariable("id") Long id) {
+    public ResponseEntity<StadiumDTO> updateStadium(@RequestBody Stadium s, @PathVariable("id") Long id) {
         Optional<Stadium> old = stadiumService.findStadiumById(id);
         if (old.isPresent()) {
-            Stadium persistedStadium = stadiumService.updateStadium(s, id);
+            StadiumDTO persistedStadium = stadiumService.updateStadium(s, id);
             return new ResponseEntity<>(persistedStadium, HttpStatus.OK);
         }
         return new ResponseEntity<>(stadiumService.saveStadium(s), HttpStatus.OK);

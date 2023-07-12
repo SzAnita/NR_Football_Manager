@@ -2,6 +2,7 @@ package com.nro.footballmanager.controller;
 
 import com.nro.footballmanager.entity.Player;
 import com.nro.footballmanager.entity.Result;
+import com.nro.footballmanager.entity.dto.ResultDTO;
 import com.nro.footballmanager.service.ResultService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,27 +17,27 @@ public class ResultController {
     @Autowired
     private ResultService resultService;
     @PostMapping("/results")
-    public ResponseEntity<Result> saveResult(@RequestBody Result result) {
+    public ResponseEntity<ResultDTO> saveResult(@RequestBody Result result) {
         return new ResponseEntity<>(resultService.saveResult(result), HttpStatus.OK);
     }
     @GetMapping("/results")
-    public ResponseEntity<List<Result>> getResults() {
+    public ResponseEntity<List<ResultDTO>> getResults() {
         return new ResponseEntity<>(resultService.findAll(), HttpStatus.OK);
     }
     @GetMapping("/results/{id}")
-    public ResponseEntity<Result> getResultById(@PathVariable("id") Long id) {
+    public ResponseEntity<ResultDTO> getResultById(@PathVariable("id") Long id) {
         Optional<Result> r = resultService.findResultById(id);
         if(r.isPresent()) {
-            return new ResponseEntity<>(r.get(), HttpStatus.OK);
+            return new ResponseEntity<>(ResultDTO.ResultToResultDTO(r.get()), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PutMapping("/results/{id}")
-    public ResponseEntity<Result> updateResult(@RequestBody Result result, @PathVariable("id") Long id) {
+    public ResponseEntity<ResultDTO> updateResult(@RequestBody Result result, @PathVariable("id") Long id) {
         Optional<Result> old = resultService.findResultById(id);
         if(old.isPresent()) {
-            Result persistedResult = resultService.updateResult(result, id);
+            ResultDTO persistedResult = resultService.updateResult(result, id);
             return new ResponseEntity<>(persistedResult, HttpStatus.OK);
         }
         return new ResponseEntity<>(resultService.saveResult(result), HttpStatus.OK);

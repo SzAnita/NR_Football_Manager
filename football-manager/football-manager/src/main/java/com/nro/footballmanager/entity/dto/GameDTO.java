@@ -5,49 +5,32 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Objects;
 
 @Data
 public class GameDTO {
-    private Long teamOneId;
-    private Long teamTwoId;
-    private Long stadiumId;
-    private LocalTime startHour;
+    private Long id;
+    private TeamDTO teamOne;
+    private TeamDTO teamTwo;
+    private StadiumDTO stadium;
+    private LocalTime start_hour;
     private LocalDate date;
-    private Long ResultId;
+    private ResultDTO result;
 
-    public static GameDTO EntityToGameDTO(Game g) {
+    public static GameDTO EntityToDTO(Game g) {
         GameDTO gameDTO = new GameDTO();
-        if(Objects.nonNull(g.getTeam_one())) {
-            gameDTO.setTeamOneId(g.getTeam_one().getId());
-        } else {
-            gameDTO.setTeamOneId(0L);
-        }
-        if(Objects.nonNull(g.getTeam_two())) {
-            gameDTO.setTeamTwoId(g.getTeam_two().getId());
-        } else {
-            gameDTO.setTeamTwoId(0L);
-        }
-        if (Objects.nonNull(g.getStadium())) {
-            gameDTO.setStadiumId(g.getStadium().getId());
-        } else {
-            gameDTO.setStadiumId(0L);
-        }
-        gameDTO.setStartHour(g.getStart_hour());
+        gameDTO.setId(g.getId());
+        gameDTO.setTeamOne(TeamDTO.EntityToTeamDTO(g.getTeam_one()));
+        gameDTO.setTeamTwo(TeamDTO.EntityToTeamDTO(g.getTeam_two()));
+        gameDTO.setStart_hour(g.getStart_hour());
         gameDTO.setDate(g.getDate());
-        if(Objects.nonNull(g.getResult())) {
-            gameDTO.setResultId(g.getResult().getId());
-        } else {
-            gameDTO.setResultId(0L);
-        }
+        gameDTO.setStadium(StadiumDTO.EntityToDTO(g.getStadium()));
         return gameDTO;
     }
-
-    public static Game EntityFromGameDTO(GameDTO gameDTO) {
-        Game game = new Game();
-        game.setStart_hour(gameDTO.getStartHour());
-        game.setDate(gameDTO.getDate());
-        return game;
+    public static Game EntityFromDTO(GameDTO gameDTO) {
+        Game g = new Game();
+        g.setId(gameDTO.getId());
+        g.setStart_hour(gameDTO.getStart_hour());
+        g.setDate(gameDTO.getDate());
+        return g;
     }
 }
-

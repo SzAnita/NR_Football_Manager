@@ -1,11 +1,19 @@
 package com.nro.footballmanager.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.nro.footballmanager.entity.enums.RoleEnum;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
-@Data
+@Getter
+@Setter
 public class Player {
 
     @Id
@@ -22,8 +30,9 @@ public class Player {
     @Enumerated(EnumType.STRING)
     private RoleEnum role;
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "team_id")
+    @OnDelete(action = OnDeleteAction.SET_NULL)
     private Team team;
 
 

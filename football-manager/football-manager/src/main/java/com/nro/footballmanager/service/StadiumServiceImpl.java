@@ -1,10 +1,12 @@
 package com.nro.footballmanager.service;
 
 import com.nro.footballmanager.entity.Stadium;
+import com.nro.footballmanager.entity.dto.StadiumDTO;
 import com.nro.footballmanager.repository.StadiumRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -14,13 +16,19 @@ public class StadiumServiceImpl implements StadiumService{
     @Autowired
     private StadiumRepository stadiumRepository;
     @Override
-    public Stadium saveStadium(Stadium s) {
-        return stadiumRepository.save(s);
+    public StadiumDTO saveStadium(Stadium s) {
+
+        return StadiumDTO.EntityToDTO(stadiumRepository.save(s));
     }
 
     @Override
-    public List<Stadium> findAll() {
-        return stadiumRepository.findAll();
+    public List<StadiumDTO> findAll() {
+        List<StadiumDTO> stadiumDTOs = new ArrayList<StadiumDTO>();
+        List<Stadium> stadiums = stadiumRepository.findAll();
+        for(int i = 0; i<stadiums.size(); i++) {
+            stadiumDTOs.add(StadiumDTO.EntityToDTO(stadiums.get(i)));
+        }
+        return stadiumDTOs;
     }
 
     @Override
@@ -29,8 +37,11 @@ public class StadiumServiceImpl implements StadiumService{
     }
 
     @Override
-    public Stadium updateStadium(Stadium s, Long id) {
-        Stadium stadium = stadiumRepository.findById(id).get();
+    public StadiumDTO updateStadium(Stadium s, Long id) {
+        StadiumDTO new_ = StadiumDTO.EntityToDTO(s);
+        new_.setId(id);
+        return StadiumDTO.EntityToDTO(stadiumRepository.save(s));
+        /*Stadium stadium = stadiumRepository.findById(id).get();
         if(Objects.nonNull(s.getName()) && !"".equalsIgnoreCase(s.getName())) {
             stadium.setName(s.getName());
         }
@@ -40,7 +51,7 @@ public class StadiumServiceImpl implements StadiumService{
         if(Objects.nonNull(s.getGames())) {
             stadium.setGames(s.getGames());
         }
-        return stadiumRepository.save(stadium);
+        return stadiumRepository.save(stadium);*/
     }
 
     @Override

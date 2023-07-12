@@ -1,11 +1,14 @@
 package com.nro.footballmanager.service;
 
 import com.nro.footballmanager.entity.Game;
+import com.nro.footballmanager.entity.Stadium;
 import com.nro.footballmanager.entity.dto.GameDTO;
+import com.nro.footballmanager.entity.dto.StadiumDTO;
 import com.nro.footballmanager.repository.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -16,13 +19,18 @@ public class GameServiceImpl implements GameService {
     private GameRepository gameRepository;
 
     @Override
-    public Game saveGame(Game g) {
-        return gameRepository.save(g);
+    public GameDTO saveGame(Game g) {
+        return GameDTO.EntityToDTO(gameRepository.save(g));
     }
 
     @Override
-    public List<Game> findAll() {
-        return gameRepository.findAll();
+    public List<GameDTO> findAll() {
+        List<GameDTO> gameDTOs = new ArrayList<GameDTO>();
+        List<Game> games = gameRepository.findAll();
+        for(int i = 0; i<games.size(); i++) {
+            gameDTOs.add(GameDTO.EntityToDTO(games.get(i)));
+        }
+        return gameDTOs;
     }
 
     @Override
@@ -31,11 +39,11 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public GameDTO updateGame(GameDTO g, Long id) {
-        Game new_ = GameDTO.EntityFromGameDTO(g);
+    public GameDTO updateGame(Game g, Long id) {
+        GameDTO new_ = GameDTO.EntityToDTO(g);
         new_.setId(id);
-        gameRepository.save(new_);
-        return g;
+        gameRepository.save(GameDTO.EntityFromDTO(new_));
+        return new_;
         /*Game game = gameRepository.findById(id).get();
         if(Objects.nonNull(g.getTeam_one())) {
             game.setTeam_one(g.getTeam_one());

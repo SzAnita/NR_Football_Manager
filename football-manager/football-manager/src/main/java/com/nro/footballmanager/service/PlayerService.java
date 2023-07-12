@@ -8,10 +8,9 @@ import java.util.Optional;
 
 public interface PlayerService {
 
-    Player savePlayer(Player p);
-    List<Player> findAll();
+    PlayerDTO savePlayer(Player p);
+    List<PlayerDTO> findAll();
     Optional<Player> getPlayerById(Long id);
-    PlayerDTO updatePlayer(PlayerDTO p, Long id);
+    PlayerDTO updatePlayer(Player p, Long id);
     void deletePlayerById(Long pid);
-    boolean exists(Long id);
 }

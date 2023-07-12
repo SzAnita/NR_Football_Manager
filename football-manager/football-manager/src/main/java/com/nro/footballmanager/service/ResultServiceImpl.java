@@ -1,10 +1,14 @@
 package com.nro.footballmanager.service;
 
+import com.nro.footballmanager.entity.Player;
 import com.nro.footballmanager.entity.Result;
+import com.nro.footballmanager.entity.dto.PlayerDTO;
+import com.nro.footballmanager.entity.dto.ResultDTO;
 import com.nro.footballmanager.repository.ResultRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -15,13 +19,18 @@ public class ResultServiceImpl implements ResultService{
     private ResultRepository resultRepository;
 
     @Override
-    public Result saveResult(Result r) {
-        return resultRepository.save(r);
+    public ResultDTO saveResult(Result r) {
+        return ResultDTO.ResultToResultDTO(resultRepository.save(r));
     }
 
     @Override
-    public List<Result> findAll() {
-        return resultRepository.findAll();
+    public List<ResultDTO> findAll() {
+        List<ResultDTO> resultDTOs = new ArrayList<ResultDTO>();
+        List<Result> results = resultRepository.findAll();
+        for(int i = 0; i<results.size(); i++) {
+            resultDTOs.add(ResultDTO.ResultToResultDTO(results.get(i)));
+        }
+        return resultDTOs;
     }
 
     @Override
@@ -30,14 +39,18 @@ public class ResultServiceImpl implements ResultService{
     }
 
     @Override
-    public Result updateResult(Result r, Long id) {
-        Result result = resultRepository.getById(id);
+    public ResultDTO updateResult(Result r, Long id) {
+        ResultDTO new_ = ResultDTO.ResultToResultDTO(r);
+        new_.setId(id);
+        resultRepository.save(ResultDTO.ResultFromResultDTO(new_));
+        return new_;
+        /*Result result = resultRepository.getById(id);
         result.setGoals_team_one(r.getGoals_team_one());
         result.setGoals_team_two(r.getGoals_team_two());
         if(Objects.nonNull(r.getGame())) {
             result.setGoals_team_two(r.getGoals_team_two());
         }
-        return resultRepository.save(result);
+        return resultRepository.save(result);*/
     }
 
     @Override
