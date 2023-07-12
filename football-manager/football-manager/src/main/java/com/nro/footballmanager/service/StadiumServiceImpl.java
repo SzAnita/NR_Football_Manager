@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class StadiumServiceImpl implements StadiumService{
@@ -18,8 +19,13 @@ public class StadiumServiceImpl implements StadiumService{
     }
 
     @Override
-    public List<Stadium> getStadiums() {
+    public List<Stadium> findAll() {
         return stadiumRepository.findAll();
+    }
+
+    @Override
+    public Optional<Stadium> findStadiumById(Long id) {
+        return stadiumRepository.findById(id);
     }
 
     @Override
@@ -34,11 +40,11 @@ public class StadiumServiceImpl implements StadiumService{
         if(Objects.nonNull(s.getGames())) {
             stadium.setGames(s.getGames());
         }
-        return stadium;
+        return stadiumRepository.save(stadium);
     }
 
     @Override
-    public void deleteStadium(Long id) {
+    public void deleteStadiumById(Long id) {
         stadiumRepository.deleteById(id);
     }
 }

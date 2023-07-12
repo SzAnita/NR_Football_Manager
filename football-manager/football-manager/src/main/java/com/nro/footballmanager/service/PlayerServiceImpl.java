@@ -1,9 +1,12 @@
 package com.nro.footballmanager.service;
 
 import com.nro.footballmanager.entity.Player;
+import com.nro.footballmanager.entity.dto.PlayerDTO;
 import com.nro.footballmanager.repository.PlayerRepository;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,31 +23,44 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public List<Player> getPlayers() {
-        return (List<Player>) playerRepository.findAll();
+    public List<Player> findAll() {
+        return playerRepository.findAll();
     }
 
     @Override
-    public Player updatePlayer(Player p, Long pid) {
-        Player player = playerRepository.findById(pid).get();
+    public PlayerDTO updatePlayer(PlayerDTO p, Long id) {
+        Player new_ = PlayerDTO.EntityFromPlayerDTO(p);
+        new_.setId(id);
+        playerRepository.save(new_);
+        return p;
+        /*Player old = playerRepository.getById(id);
         if(Objects.nonNull(p.getName()) && !"".equalsIgnoreCase(p.getName())) {
-            player.setName(p.getName());
+            old.setName(p.getName());
         }
-        if(Objects.nonNull(p.getGoalsScored()) && p.getGoalsScored() >= 0) {
-            player.setGoalsScored(p.getGoalsScored());
+        if(Objects.nonNull(p.getGoalsScored())) {
+            old.setGoalsScored(p.getGoalsScored());
         }
-        if(Objects.nonNull(p.getRole()) && !"".equalsIgnoreCase(String.valueOf(p.getRole()))) {
-            player.setRole(p.getRole());
+        if(Objects.nonNull(p.getRole())) {
+            old.setRole(p.getRole());
         }
         if(Objects.nonNull(p.getTeam())) {
-            player.setTeam(p.getTeam());
+            old.setTeam(p.getTeam());
         }
-        return player;
+        return playerRepository.save(old);*/
+    }
+    @Override
+    public Optional<Player> getPlayerById(Long id) {
+        return playerRepository.findById(id);
     }
 
     @Override
     public void deletePlayerById(Long pid) {
         playerRepository.deleteById(pid);
+    }
+
+    @Override
+    public boolean exists(Long id) {
+        return playerRepository.existsById(id);
     }
 
 }

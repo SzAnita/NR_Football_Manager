@@ -1,11 +1,15 @@
 package com.nro.footballmanager.controller;
 
 import com.nro.footballmanager.entity.Player;
+import com.nro.footballmanager.entity.dto.PlayerDTO;
 import com.nro.footballmanager.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -14,23 +18,42 @@ public class PlayerController {
     private PlayerService playerService;
 
     @PostMapping("/players")
-    public Player savePlayer(@RequestBody Player player) {
-        return playerService.savePlayer(player);
+    public ResponseEntity<Player> savePlayer(@RequestBody Player player) {
+        return new ResponseEntity<>(playerService.savePlayer(player), HttpStatus.OK);
     }
 
     @GetMapping("/players")
-    public List<Player> getPlayer() {
-        return playerService.getPlayers();
+    public ResponseEntity<List<Player>> findAllPlayers() {
+        List<Player> allPlayers = playerService.findAll();
+        return new ResponseEntity<>(allPlayers, HttpStatus.OK);
+    }
+
+    @GetMapping("/players/{id}")
+    public ResponseEntity<Player> findPlayerById(@PathVariable("id") Long id) {
+        Optional<Player> p = playerService.getPlayerById(id);
+        if (p.isPresent()) {
+            return new ResponseEntity<>(p.get(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
     @PutMapping("/players/{id}")
-    public Player updatePlayer(@RequestBody Player player, @PathVariable("id") Long player_id) {
-        return playerService.updatePlayer(player, player_id);
+    public ResponseEntity<PlayerDTO> updatePlayer(@RequestBody PlayerDTO player, @PathVariable("id") Long player_id) {
+        Optional<Player> old = playerService.getPlayerById(player_id);
+        if(old.isPresent()) {
+            PlayerDTO persistedPlayer = playerService.updatePlayer(player, player_id);
+            return new ResponseEntity<>(persistedPlayer, HttpStatus.OK);
+        }
+        Player new_ = playerService.savePlayer(PlayerDTO.EntityFromPlayerDTO(player));
+        return new ResponseEntity<>(PlayerDTO.EntityToPlayerDTO(new_), HttpStatus.OK);
     }
 
     @DeleteMapping("/players/{id}")
-    public String deletePlayerById(@PathVariable("id") Long player_id) {
+    public ResponseEntity<HttpStatus> deletePlayerById(@PathVariable("id") Long player_id) {
+        if(!playerService.exists(player_id)) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         playerService.deletePlayerById(player_id);
-        return "Deleted successfully";
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

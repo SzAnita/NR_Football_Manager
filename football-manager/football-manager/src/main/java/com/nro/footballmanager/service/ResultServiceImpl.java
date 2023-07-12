@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class ResultServiceImpl implements ResultService{
@@ -19,23 +20,24 @@ public class ResultServiceImpl implements ResultService{
     }
 
     @Override
-    public List<Result> getResults() {
+    public List<Result> findAll() {
         return resultRepository.findAll();
+    }
+
+    @Override
+    public Optional<Result> findResultById(Long id) {
+        return resultRepository.findById(id);
     }
 
     @Override
     public Result updateResult(Result r, Long id) {
         Result result = resultRepository.getById(id);
-        if(Objects.nonNull(r.getGoals_team_one())) {
-            result.setGoals_team_one(r.getGoals_team_one());
-        }
-        if(Objects.nonNull(r.getGoals_team_two())) {
-            result.setGoals_team_two(r.getGoals_team_two());
-        }
+        result.setGoals_team_one(r.getGoals_team_one());
+        result.setGoals_team_two(r.getGoals_team_two());
         if(Objects.nonNull(r.getGame())) {
             result.setGoals_team_two(r.getGoals_team_two());
         }
-        return result;
+        return resultRepository.save(result);
     }
 
     @Override

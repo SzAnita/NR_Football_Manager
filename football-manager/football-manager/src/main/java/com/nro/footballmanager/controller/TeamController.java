@@ -3,9 +3,12 @@ package com.nro.footballmanager.controller;
 import com.nro.footballmanager.entity.Team;
 import com.nro.footballmanager.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class TeamController {
@@ -13,23 +16,38 @@ public class TeamController {
     private TeamService teamService;
 
     @PostMapping("/teams")
-    public Team saveTeam(@RequestBody Team team) {
-        return teamService.saveTeam(team);
+    public ResponseEntity<Team> saveTeam(@RequestBody Team team) {
+        return new ResponseEntity<>(teamService.saveTeam(team), HttpStatus.OK);
     }
-
     @GetMapping("/teams")
-    public List<Team> getTeam() {
-        return teamService.getTeams();
+    public ResponseEntity<List<Team>> getTeams() {
+        return new ResponseEntity<>(teamService.findAll(), HttpStatus.OK);
+    }
+    @GetMapping("/teams/{id}")
+    public ResponseEntity<Team> getTeamById(@PathVariable("id") Long id) {
+        Optional<Team> team = teamService.getTeamById(id);
+        if(team.isPresent()) {
+            return new ResponseEntity<>(team.get(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PutMapping("/teams/{id}")
-    public Team updateTeam(@RequestBody Team team, @PathVariable("id") Long team_id) {
-        return teamService.updateTeam(team, team_id);
+    public ResponseEntity<Team> updateTeam(@RequestBody Team team, @PathVariable("id") Long team_id) {
+        Optional<Team> old = teamService.getTeamById(team_id);
+        if(old.isPresent()) {
+            Team persistedTeam = teamService.updateTeam(team, team_id);
+            return new ResponseEntity<>(persistedTeam, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(teamService.saveTeam(team), HttpStatus.OK);
     }
 
     @DeleteMapping("/teams/{id}")
-    public String deleteTeamById(@PathVariable("id") Long team_id) {
-        teamService.deleteTeam(team_id);
-        return "Deleted successfully";
+    public ResponseEntity<HttpStatus> deleteTeamById(@PathVariable("id") Long team_id) {
+        if(!teamService.exists(team_id)) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        teamService.deleteTeamById(team_id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

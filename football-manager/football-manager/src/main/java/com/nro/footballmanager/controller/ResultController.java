@@ -4,32 +4,51 @@ import com.nro.footballmanager.entity.Player;
 import com.nro.footballmanager.entity.Result;
 import com.nro.footballmanager.service.ResultService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class ResultController {
     @Autowired
     private ResultService resultService;
     @PostMapping("/results")
-    public Result saveResult(@RequestBody Result result) {
-        return resultService.saveResult(result);
+    public ResponseEntity<Result> saveResult(@RequestBody Result result) {
+        return new ResponseEntity<>(resultService.saveResult(result), HttpStatus.OK);
     }
-
     @GetMapping("/results")
-    public List<Result> getPlayer() {
-        return resultService.getResults();
+    public ResponseEntity<List<Result>> getResults() {
+        return new ResponseEntity<>(resultService.findAll(), HttpStatus.OK);
+    }
+    @GetMapping("/results/{id}")
+    public ResponseEntity<Result> getResultById(@PathVariable("id") Long id) {
+        Optional<Result> r = resultService.findResultById(id);
+        if(r.isPresent()) {
+            return new ResponseEntity<>(r.get(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PutMapping("/results/{id}")
-    public Result updateResult(@RequestBody Result result, @PathVariable("id") Long id) {
-        return resultService.updateResult(result, id);
+    public ResponseEntity<Result> updateResult(@RequestBody Result result, @PathVariable("id") Long id) {
+        Optional<Result> old = resultService.findResultById(id);
+        if(old.isPresent()) {
+            Result persistedResult = resultService.updateResult(result, id);
+            return new ResponseEntity<>(persistedResult, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(resultService.saveResult(result), HttpStatus.OK);
     }
 
     @DeleteMapping("/results/{id}")
-    public String deleteResultById(@PathVariable("id") Long id) {
-        resultService.deleteResultById(id);
-        return "Deleted successfully";
+    public ResponseEntity<HttpStatus> deleteResultById(@PathVariable("id") Long id) {
+        Optional<Result> r = resultService.findResultById(id);
+        if(r.isPresent()) {
+            resultService.deleteResultById(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }
