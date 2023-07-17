@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Players</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/base.css" rel="stylesheet">
+  <link href="css/teams.css" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/players.js"></script>
+  <meta name="viewport" content="width=device-width">
+</head>
+<body>
+<div class="navbar">
+  <ul id="ul-navbar">
+    <li><a href="index.html">NRO Football Manager</a></li>
+    <li><a href="teams.html">Teams</a></li>
+    <li><a href="players.html"></a>Players</li>
+  </ul>
+</div>
+<div class="content">
+  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPlayer" id="createPlayer">
+    Add Player
+  </button>
+  <div class="modal" id="addPlayer">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Add Player</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+            <form id="add_player">
+              <label for="name"><input type="text" id="name" name="name" placeholder="Player name"></label>
+              <label for="goals"><input type="number" id="goals" name="goals" placeholder="Goals scored"></label>
+              <label for="role" id="createRole"><select class="form-select" id="role">
+                <option>FORWARD</option>
+                <option>MIDFIELDER</option>
+                <option>DEFENDER</option>
+                <option>GOALKEEPER</option>
+              </select></label>
+              <input type="submit" value="Submit">
+            </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <table>
+    <tr>
+      <th>#</th>
+      <th>Name</th>
+      <th>Goals Scored</th>
+      <th>Role</th>
+      <th>Team</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </table>
+</div>
+</body>
+<script>
+  $("#add_player").submit(function (event) {
+    event.preventDefault();
+    let row = $("<tr></tr>")
+    alert(j);
+    row.append(createCell(j));
+    row.append(createCell($("#name").val()));
+    row.append(createCell($("#goals").val()));
+    row.append(createCell($("#role").val()));
+    row.append(createCell($("#team").val()));
+    let data = {
+      'id':k,
+      'name':$("#name").val(),
+      'goalsScored':$("#goals").val(),
+      'role':$("#role").val(),
+      'team':$("#team").val()
+    }
+    let buttonEdit = editButton(data, $("table").children().length);
+    row.append(createCell(buttonEdit));
+    row.append(createCell($("<button class='delete-player btn btn-primary'>Delete</button>")));
+    $("table").append(row);
+    let team = $("#team").val()
+    alert($("#team").html());
+    $.ajax({
+      type:'GET',
+      url: 'teams/'+team,
+      success(data) {
+        let team = {
+          'id':data.id,
+          'name':data.name,
+          'goalsScored':data.goalsScored,
+          'goalsReceived':data.goalsReceived,
+          'victories':data.victories,
+          'draws':data.draws,
+          'defeats': data.defeats
+        };
+        let player = {
+          "name": $("#name").val(),
+          "goalsScored": $("#goals").val(),
+          "role": $("#role").val(),
+          "team":team
+        };
+        $.ajax({
+          type:'POST',
+          url:'players',
+          contentType:'application/json',
+          data: JSON.stringify(player)
+        });
+        $("label[for=team]").remove();
+      }
+    });
+    j++;
+  });
+</script>
+</html>

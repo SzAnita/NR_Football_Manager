@@ -1,0 +1,35 @@
+table, th, td {
+    border: 0.25em solid cornsilk;
+    font-size: 2dvh;
+    text-align: center;
+    margin: 15px;
+}
+th{padding: 1em;}
+td{
+    padding: 0.5em;
+}
+tr:nth-child(even) {
+    background-color: #bae1fa;
+}
+tr:nth-child(odd) {
+    background-color: #8cb2f8;
+}
+tr:nth-child(1) {
+    background-color: #e1bfa9;
+}
+button {
+    margin: 10px;
+}
+.modal-body {
+    block-size: fit-content;
+    display: flex;
+}
+.table{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    overflow-x: scroll;
+}
+#create {
+
+}

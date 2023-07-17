@@ -62,5 +62,14 @@ public class Team {
                 ", games_as_two=" + games_as_two +
                 '}';
     }
+    @PreRemove
+    private void setNull(){
+        for (Player player: this.players)
+            player.setTeam(null);
+        for (Game gameOne: this.games_as_one)
+            gameOne.setTeam_one(null);
+        for (Game gameTwo : this.games_as_two)
+            gameTwo.setTeam_two(null);
+    }
 
 }

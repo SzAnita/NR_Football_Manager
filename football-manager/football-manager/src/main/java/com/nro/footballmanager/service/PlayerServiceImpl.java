@@ -2,6 +2,7 @@ package com.nro.footballmanager.service;
 
 import com.nro.footballmanager.entity.Player;
 import com.nro.footballmanager.entity.dto.PlayerDTO;
+import com.nro.footballmanager.entity.dto.TeamDTO;
 import com.nro.footballmanager.repository.PlayerRepository;
 
 import java.util.ArrayList;
@@ -20,8 +21,9 @@ public class PlayerServiceImpl implements PlayerService {
     private PlayerRepository playerRepository;
 
     @Override
-    public PlayerDTO savePlayer(Player p) {
-        return PlayerDTO.EntityToPlayerDTO(playerRepository.save(p));
+    public PlayerDTO savePlayer(PlayerDTO p) {
+        System.out.println();
+        return PlayerDTO.EntityToPlayerDTO(playerRepository.save(PlayerDTO.EntityFromPlayerDTO(p)));
     }
 
     @Override
@@ -36,9 +38,16 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public PlayerDTO updatePlayer(Player p, Long id) {
-        PlayerDTO new_ = PlayerDTO.EntityToPlayerDTO(p);
+        PlayerDTO old = PlayerDTO.EntityToPlayerDTO(playerRepository.findById(id).get());
+        old.setName(p.getName());
+        old.setGoalsScored(p.getGoalsScored());
+        old.setRole(p.getRole());
+        old.setTeam(TeamDTO.EntityToTeamDTO(p.getTeam()));
+        System.out.println(String.valueOf(old));
+        Player new_ = PlayerDTO.EntityFromPlayerDTO(old);
         new_.setId(id);
-        return PlayerDTO.EntityToPlayerDTO(playerRepository.save(PlayerDTO.EntityFromPlayerDTO(new_)));
+        playerRepository.save(new_);
+        return old;
         /*Player old = playerRepository.getById(id);
         if(Objects.nonNull(p.getName()) && !"".equalsIgnoreCase(p.getName())) {
             old.setName(p.getName());
@@ -59,6 +68,10 @@ public class PlayerServiceImpl implements PlayerService {
         return playerRepository.findById(id);
     }
 
+    @Override
+    public List<Optional<Player>> getPlayersByName(String name) {
+        return playerRepository.findPlayerByName(name);
+    }
     @Override
     public void deletePlayerById(Long pid) {
         playerRepository.deleteById(pid);

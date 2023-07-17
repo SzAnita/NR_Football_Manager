@@ -18,8 +18,9 @@ public class TeamServiceImpl implements TeamService{
     @Autowired
     private TeamRepository teamRepository;
     @Override
-    public TeamDTO saveTeam(Team t) {
-        return TeamDTO.EntityToTeamDTO(teamRepository.save(t));
+    public TeamDTO saveTeam(TeamDTO t) {
+        teamRepository.save(TeamDTO.EntityFromTeamDTO(t));
+        return t;
     }
 
     @Override
@@ -38,11 +39,21 @@ public class TeamServiceImpl implements TeamService{
     }
 
     @Override
+    public List<Optional<Team>> getTeamByName(String name) {
+        return  teamRepository.findByName(name);
+    }
+
+    @Override
     public TeamDTO updateTeam(Team t, Long id) {
-        TeamDTO new_ = TeamDTO.EntityToTeamDTO(t);
-        new_.setId(id);
-        teamRepository.save(TeamDTO.EntityFromTeamDTO(new_));
-        return new_;
+        TeamDTO old = TeamDTO.EntityToTeamDTO(teamRepository.findById(id).get());
+        old.setName(t.getName());
+        old.setGoalsScored(t.getGoalsScored());
+        old.setGoalsReceived(t.getGoalsReceived());
+        old.setVictories(t.getVictories());
+        old.setDraws(t.getDraws());
+        old.setDefeats(t.getDefeats());
+        teamRepository.save(TeamDTO.EntityFromTeamDTO(old));
+        return old;
         /*Team team = teamRepository.findById(tid).get();
         if(Objects.nonNull(t.getName()) && !"".equalsIgnoreCase(t.getName())) {
             team.setName(t.getName());

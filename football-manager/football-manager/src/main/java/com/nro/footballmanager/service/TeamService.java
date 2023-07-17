@@ -7,8 +7,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TeamService {
-    TeamDTO saveTeam(Team t);
+    TeamDTO saveTeam(TeamDTO t);
     List<TeamDTO> findAll();
+    List<Optional<Team>> getTeamByName(String name);
     Optional<Team> getTeamById(Long id);
     TeamDTO updateTeam(Team t, Long id);
     void deleteTeamById(Long id);

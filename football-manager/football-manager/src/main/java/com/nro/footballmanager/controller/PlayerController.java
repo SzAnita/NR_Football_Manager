@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,7 +19,7 @@ public class PlayerController {
     private PlayerService playerService;
 
     @PostMapping("/players")
-    public ResponseEntity<PlayerDTO> savePlayer(@RequestBody Player player) {
+    public ResponseEntity<PlayerDTO> savePlayer(@RequestBody PlayerDTO player) {
         return new ResponseEntity<>(playerService.savePlayer(player), HttpStatus.OK);
     }
 
@@ -37,11 +38,26 @@ public class PlayerController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @GetMapping("players/name/{name}")
+    public ResponseEntity<List<PlayerDTO>> getPlayerByName(@PathVariable("name") String name) {
+        List<Optional<Player>> players = playerService.getPlayersByName(name);
+        List<PlayerDTO> existPlayers = new ArrayList<>();
+        for (Optional<Player> p: players) {
+            if(p.isPresent()) {
+                existPlayers.add(PlayerDTO.EntityToPlayerDTO(p.get()));
+            }
+        }
+        if (existPlayers.size() > 0) {
+            return new ResponseEntity<>(existPlayers, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
     @PutMapping("/players/{id}")
-    public ResponseEntity<PlayerDTO> updatePlayer(@RequestBody Player player, @PathVariable("id") Long player_id) {
+    public ResponseEntity<PlayerDTO> updatePlayer(@RequestBody PlayerDTO player, @PathVariable("id") Long player_id) {
         Optional<Player> old = playerService.getPlayerById(player_id);
         if(old.isPresent()) {
-            PlayerDTO persistedPlayer = playerService.updatePlayer(player, player_id);
+            PlayerDTO persistedPlayer = playerService.updatePlayer(PlayerDTO.EntityFromPlayerDTO(player), player_id);
             return new ResponseEntity<>(persistedPlayer, HttpStatus.OK);
         }
         return new ResponseEntity<>(playerService.savePlayer(player), HttpStatus.OK);
