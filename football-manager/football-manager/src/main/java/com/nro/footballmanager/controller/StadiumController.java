@@ -36,13 +36,13 @@ public class StadiumController {
     }
 
     @PutMapping("/stadiums/{id}")
-    public ResponseEntity<StadiumDTO> updateStadium(@RequestBody Stadium s, @PathVariable("id") Long id) {
+    public ResponseEntity<StadiumDTO> updateStadium(@RequestBody StadiumDTO s, @PathVariable("id") Long id) {
         Optional<Stadium> old = stadiumService.findStadiumById(id);
         if (old.isPresent()) {
-            StadiumDTO persistedStadium = stadiumService.updateStadium(s, id);
+            StadiumDTO persistedStadium = stadiumService.updateStadium(StadiumDTO.EntityFromDTO(s), id);
             return new ResponseEntity<>(persistedStadium, HttpStatus.OK);
         }
-        return new ResponseEntity<>(stadiumService.saveStadium(s), HttpStatus.OK);
+        return new ResponseEntity<>(stadiumService.saveStadium(StadiumDTO.EntityFromDTO(s)), HttpStatus.OK);
     }
 
     @DeleteMapping("/stadiums/{id}")

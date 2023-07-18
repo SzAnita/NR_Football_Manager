@@ -38,9 +38,11 @@ public class StadiumServiceImpl implements StadiumService{
 
     @Override
     public StadiumDTO updateStadium(Stadium s, Long id) {
-        StadiumDTO new_ = StadiumDTO.EntityToDTO(s);
-        new_.setId(id);
-        return StadiumDTO.EntityToDTO(stadiumRepository.save(s));
+        StadiumDTO old = StadiumDTO.EntityToDTO(stadiumRepository.findById(id).get());
+        old.setName(s.getName());
+        old.setLocation(s.getLocation());
+        stadiumRepository.save(StadiumDTO.EntityFromDTO(old));
+        return old;
         /*Stadium stadium = stadiumRepository.findById(id).get();
         if(Objects.nonNull(s.getName()) && !"".equalsIgnoreCase(s.getName())) {
             stadium.setName(s.getName());
