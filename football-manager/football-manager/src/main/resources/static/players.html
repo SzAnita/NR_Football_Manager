@@ -20,9 +20,11 @@
   </ul>
 </div>
 <div class="content">
+  <div>
   <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPlayer" id="createPlayer">
     Add Player
   </button>
+  </div>
   <div class="modal" id="addPlayer">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -50,6 +52,7 @@
       </div>
     </div>
   </div>
+  <div class="table">
   <table>
     <tr>
       <th>#</th>
@@ -61,13 +64,13 @@
       <th></th>
     </tr>
   </table>
+  </div>
 </div>
 </body>
 <script>
   $("#add_player").submit(function (event) {
     event.preventDefault();
     let row = $("<tr></tr>")
-    alert(j);
     row.append(createCell(j));
     row.append(createCell($("#name").val()));
     row.append(createCell($("#goals").val()));
@@ -85,25 +88,31 @@
     row.append(createCell($("<button class='delete-player btn btn-primary'>Delete</button>")));
     $("table").append(row);
     let team = $("#team").val()
-    alert($("#team").html());
+    alert(team);
     $.ajax({
       type:'GET',
       url: 'teams/'+team,
       success(data) {
-        let team = {
-          'id':data.id,
-          'name':data.name,
-          'goalsScored':data.goalsScored,
-          'goalsReceived':data.goalsReceived,
-          'victories':data.victories,
-          'draws':data.draws,
-          'defeats': data.defeats
-        };
+        let team2;
+        for(let i = 0; i<data.length; i++) {
+          if(data[i].name == team) {
+            team2 = {
+              'id':data[i].id,
+              'name':data[i].name,
+              'goalsScored':data[i].goalsScored,
+              'goalsReceived':data[i].goalsReceived,
+              'victories':data[i].victories,
+              'draws':data[i].draws,
+              'defeats': data[i].defeats
+            };
+            break;
+          }
+        }
         let player = {
           "name": $("#name").val(),
           "goalsScored": $("#goals").val(),
           "role": $("#role").val(),
-          "team":team
+          "team":team2
         };
         $.ajax({
           type:'POST',

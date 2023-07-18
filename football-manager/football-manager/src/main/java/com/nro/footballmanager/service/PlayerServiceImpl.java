@@ -22,8 +22,11 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public PlayerDTO savePlayer(PlayerDTO p) {
-        System.out.println();
-        return PlayerDTO.EntityToPlayerDTO(playerRepository.save(PlayerDTO.EntityFromPlayerDTO(p)));
+        System.out.println(p);
+        Player pl = PlayerDTO.EntityFromPlayerDTO(p);
+        System.out.println(String.valueOf(pl));
+        Player saved = playerRepository.save(pl);
+        return PlayerDTO.EntityToPlayerDTO(saved);
     }
 
     @Override

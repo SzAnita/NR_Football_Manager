@@ -44,7 +44,6 @@ $(document).ready(function () {
 
 $(document).on("submit", ".edit_team", function (event) {
     event.preventDefault();
-    alert("test1");
     let curr_cell = $(this).closest("tr").children().eq(1);
     let old_team = {
         'name': $(this).closest("tr").children().eq(1),
@@ -89,5 +88,6 @@ $(document).on("click", ".deleteTeam", function (event) {
         url:'teams/'+$(this).attr("id"),
         contentType: 'application/json',
     });
+    j--;
 });
 

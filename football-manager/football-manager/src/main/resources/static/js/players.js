@@ -47,8 +47,11 @@ function editButton(data, i) {
     div_modal_content.append(div_modal_header, div_modal_body, div_modal_footer);
     div_modal_dialog.append(div_modal_content);
     div_modal.append(div_modal_dialog);
-    button.append(div_modal);
-    return button;
+    let div_wrap = $("<div></div>");
+    div_wrap.append(button);
+    button.after(div_modal);
+
+    return div_wrap;
 }
 $(document).ready(function () {
     $.ajax({
@@ -123,25 +126,26 @@ $(document).ready(function () {
     });
 });*/
 
-$(document).on("mousedown", ".editPlayer", function (event) {
+$(document).on("click", ".editPlayer", function (event) {
     event.stopPropagation();
-    let number = Number($(this).parent().parent().children().first().text())-1;
-    if(!($("#editTeam"+number).length>0)) {
-        $.ajax({
-            type: 'GET',
-            url: 'teams',
-            success(data) {
-                let label = $("<label for='editTeam" + number + "'>Team: </label>");
-                let select = $("<select id='editTeam" + number + "' name='editTeam" + number + "' class='form-select'></select>");
-                for (let i = 0; i < data.length; i++) {
-                    let option = $("<option>" + data[i].name + "</option>");
-                    select.append(option);
-                }
-                label.append(select);
-                $("label[for=editRole"+number+"]").after(label);
-            }
-        });
+    let number = Number($(this).parent().parent().parent().children().first().text())-1;
+    if($("#editTeam"+number).length>0) {
+        $("editTeam"+number).remove();
     }
+    $.ajax({
+        type: 'GET',
+        url: 'teams',
+        success(data) {
+            let label = $("<label for='editTeam" + number + "'>Team: </label>");
+            let select = $("<select id='editTeam" + number + "' name='editTeam" + number + "' class='form-select'></select>");
+            for (let i = 0; i < data.length; i++) {
+                let option = $("<option>" + data[i].name + "</option>");
+                select.append(option);
+            }
+            label.append(select);
+            $("label[for=editRole"+number+"]").after(label);
+        }
+    });
 });
 $(document).on("submit", ".edit-player", function (event) {
     event.preventDefault();
