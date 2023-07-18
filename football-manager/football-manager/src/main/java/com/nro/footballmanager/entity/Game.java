@@ -3,6 +3,7 @@ package com.nro.footballmanager.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Entity
@@ -26,10 +27,7 @@ public class Game {
     private Stadium stadium;
 
     @Column
-    private LocalTime start_hour;
-
-    @Column
-    private LocalDate date;
+    private LocalDateTime date;
 
     @OneToOne
     @JoinColumn(name = "result_id")

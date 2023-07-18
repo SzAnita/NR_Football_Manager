@@ -35,6 +35,16 @@ public class StadiumController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @GetMapping(value = "/stadiums", params = "name")
+    public ResponseEntity<StadiumDTO> getStadiumByName(@RequestParam String name) {
+        System.out.println(name);
+        Optional<Stadium> s = stadiumService.findStadiumByName(name);
+        if(s.isPresent()) {
+            return new ResponseEntity<>(StadiumDTO.EntityToDTO(s.get()),HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
     @PutMapping("/stadiums/{id}")
     public ResponseEntity<StadiumDTO> updateStadium(@RequestBody StadiumDTO s, @PathVariable("id") Long id) {
         Optional<Stadium> old = stadiumService.findStadiumById(id);

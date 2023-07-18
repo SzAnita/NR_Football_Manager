@@ -3,7 +3,9 @@ package com.nro.footballmanager.service;
 import com.nro.footballmanager.entity.Game;
 import com.nro.footballmanager.entity.Stadium;
 import com.nro.footballmanager.entity.dto.GameDTO;
+import com.nro.footballmanager.entity.dto.ResultDTO;
 import com.nro.footballmanager.entity.dto.StadiumDTO;
+import com.nro.footballmanager.entity.dto.TeamDTO;
 import com.nro.footballmanager.repository.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,8 +21,10 @@ public class GameServiceImpl implements GameService {
     private GameRepository gameRepository;
 
     @Override
-    public GameDTO saveGame(Game g) {
-        return GameDTO.EntityToDTO(gameRepository.save(g));
+    public GameDTO saveGame(GameDTO g) {
+        Game new_game = GameDTO.EntityFromDTO(g);
+        gameRepository.save(new_game);
+        return g;
     }
 
     @Override
@@ -37,33 +41,18 @@ public class GameServiceImpl implements GameService {
     public Optional<Game> findGameById(Long id) {
         return gameRepository.findById(id);
     }
-
     @Override
     public GameDTO updateGame(Game g, Long id) {
-        GameDTO new_ = GameDTO.EntityToDTO(g);
-        new_.setId(id);
-        gameRepository.save(GameDTO.EntityFromDTO(new_));
-        return new_;
-        /*Game game = gameRepository.findById(id).get();
-        if(Objects.nonNull(g.getTeam_one())) {
-            game.setTeam_one(g.getTeam_one());
-        }
-        if(Objects.nonNull(g.getTeam_two())) {
-            game.setTeam_two(g.getTeam_two());
-        }
-        if (Objects.nonNull(g.getStadium())) {
-            game.setStadium(g.getStadium());
-        }
-        if(Objects.nonNull(g.getStart_hour())) {
-            game.setStart_hour(g.getStart_hour());
-        }
-        if(Objects.nonNull(g.getDate())) {
-            game.setDate(g.getDate());
-        }
-        if(Objects.nonNull(g.getResult())) {
-            game.setResult(g.getResult());
-        }
-        return gameRepository.save(game);*/
+        GameDTO old = GameDTO.EntityToDTO(gameRepository.findById(id).get());
+        old.setTeamOne(TeamDTO.EntityToTeamDTO(g.getTeam_one()));
+        old.setTeamTwo(TeamDTO.EntityToTeamDTO(g.getTeam_two()));
+        old.setStadium(StadiumDTO.EntityToDTO(g.getStadium()));
+        old.setDate(g.getDate());
+        old.setResult(ResultDTO.ResultToResultDTO(g.getResult()));
+        Game new_game = GameDTO.EntityFromDTO(old);
+        new_game.setId(id);
+        Game saved = gameRepository.save(new_game);
+        return old;
     }
 
     @Override

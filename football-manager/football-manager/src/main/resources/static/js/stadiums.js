@@ -12,12 +12,12 @@ function editButton(data, i) {
     let div_modal_body = $('<div class="modal-body"></div>');
     let div_modal_footer = $('<div class="modal-footer"><button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button></div>');
     let form = $("<form class='edit-stadium'></form>");
-    let label_id = $("<label for='player_id'></label>")
+    let label_id = $("<label for='stadium_id'></label>")
     let input_id = $("<input type='number'>");
     input_id.attr({
         'hidden':'hidden',
-        'id':'player_id',
-        'name':'player_id',
+        'id':'stadium_id',
+        'name':'stadium_id',
         'value':data.id
     });
     label_id.append(input_id);

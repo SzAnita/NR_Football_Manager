@@ -37,6 +37,11 @@ public class StadiumServiceImpl implements StadiumService{
     }
 
     @Override
+    public Optional<Stadium> findStadiumByName(String n) {
+        ArrayList<Optional<Stadium>> stadiums = (ArrayList<Optional<Stadium>>) stadiumRepository.findStadiumByName(n);
+        return stadiums.get(0);
+    }
+    @Override
     public StadiumDTO updateStadium(Stadium s, Long id) {
         StadiumDTO old = StadiumDTO.EntityToDTO(stadiumRepository.findById(id).get());
         old.setName(s.getName());

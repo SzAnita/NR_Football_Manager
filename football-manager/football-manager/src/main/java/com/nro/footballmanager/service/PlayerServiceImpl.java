@@ -22,9 +22,7 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public PlayerDTO savePlayer(PlayerDTO p) {
-        System.out.println(p);
         Player pl = PlayerDTO.EntityFromPlayerDTO(p);
-        System.out.println(String.valueOf(pl));
         Player saved = playerRepository.save(pl);
         return PlayerDTO.EntityToPlayerDTO(saved);
     }
@@ -46,7 +44,6 @@ public class PlayerServiceImpl implements PlayerService {
         old.setGoalsScored(p.getGoalsScored());
         old.setRole(p.getRole());
         old.setTeam(TeamDTO.EntityToTeamDTO(p.getTeam()));
-        System.out.println(String.valueOf(old));
         Player new_ = PlayerDTO.EntityFromPlayerDTO(old);
         new_.setId(id);
         playerRepository.save(new_);

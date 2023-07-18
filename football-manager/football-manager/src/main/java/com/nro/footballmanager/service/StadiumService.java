@@ -10,6 +10,7 @@ public interface StadiumService {
     StadiumDTO saveStadium(Stadium s);
     List<StadiumDTO> findAll();
     Optional<Stadium> findStadiumById(Long id);
+    Optional<Stadium> findStadiumByName(String n);
     StadiumDTO updateStadium(Stadium s, Long id);
     void deleteStadiumById(Long id);
 }

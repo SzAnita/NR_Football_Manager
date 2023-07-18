@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface GameService {
-    GameDTO saveGame (Game g);
+    GameDTO saveGame (GameDTO g);
     List<GameDTO> findAll();
     Optional<Game> findGameById(Long id);
     GameDTO updateGame (Game g, Long id);

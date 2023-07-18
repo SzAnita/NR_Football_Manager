@@ -25,17 +25,20 @@ public class TeamController {
     public ResponseEntity<List<TeamDTO>> getTeams() {
         return new ResponseEntity<>(teamService.findAll(), HttpStatus.OK);
     }
-    @GetMapping("/teams/{name}")
-    public ResponseEntity<List<TeamDTO>> getTeamById(@PathVariable("name") String name) {
-        List<Optional<Team>> teams = teamService.getTeamByName(name);
-        List<TeamDTO> valid_teams = new ArrayList<>();
-        for(Optional<Team> t: teams){
-            if(t.isPresent()) {
-                valid_teams.add(TeamDTO.EntityToTeamDTO(t.get()));
-            }
+    @GetMapping("/teams/{id}")
+    public ResponseEntity<TeamDTO> getTeamById(@PathVariable ("id") Long id) {
+        Optional<Team> team = teamService.getTeamById(id);
+        if(team.isPresent()) {
+            return new ResponseEntity<>(TeamDTO.EntityToTeamDTO(team.get()), HttpStatus.OK);
         }
-        if(valid_teams.size() > 0) {
-            return new ResponseEntity<>(valid_teams, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping(value = "/teams", params = "name")
+    public ResponseEntity<TeamDTO> getTeamByName(@RequestParam("name") String name) {
+        Optional<Team> team = teamService.getTeamByName(name);
+        if(team.isPresent()) {
+            return new ResponseEntity<>(TeamDTO.EntityToTeamDTO(team.get()), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }

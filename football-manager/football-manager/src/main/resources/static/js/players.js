@@ -151,7 +151,7 @@ $(document).on("submit", ".edit-player", function (event) {
     event.preventDefault();
     let curr_cell = $(this).closest("tr").children().eq(1)
     let curr_input_val = $(this).children().first().next().children().first();
-    for(let i = 0; i<3; i++) {
+    for(let i = 0; i<=3; i++) {
         curr_cell.text(curr_input_val.val());
         curr_cell = curr_cell.next();
         curr_input_val = curr_input_val.parent().next().children().first();
@@ -161,7 +161,7 @@ $(document).on("submit", ".edit-player", function (event) {
     let player_id = $(this).children().first().children().first().val();
     $.ajax({
         type:'GET',
-        url: 'teams/'+team.val(),
+        url: 'teams?name='+team.val(),
         success(data) {
             let team = {
                 'id':data.id,

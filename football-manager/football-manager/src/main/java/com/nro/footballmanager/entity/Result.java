@@ -19,6 +19,9 @@ public class Result {
     @Column
     private int goals_team_two;
 
+    @Column
+    private boolean over;
+
     @OneToOne(mappedBy = "result")
     private Game game;
 }

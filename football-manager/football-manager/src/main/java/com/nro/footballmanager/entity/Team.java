@@ -20,7 +20,7 @@ public class Team {
     @Column(name = "id", nullable = false, updatable = false)
     private Long id;
 
-    @Column
+    @Column(unique = true)
     private String name;
 
     @Column
