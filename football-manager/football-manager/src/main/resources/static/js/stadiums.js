@@ -84,14 +84,16 @@ $(document).on("submit", "#add_stadium", function (event) {
         contentType: "application/json",
         data: JSON.stringify(stadium),
         success: function (data) {
-            alert("test");
             let row = $("<tr></tr>");
+            row.append(createCell(j));
             row.append(createCell($("#name").val()));
-            row.append(createCell($("#city")).val());
+            let city = $("#city").val();
+            row.append(createCell(city));
             stadium.id = data.id
             row.append(createCell(editButton(stadium, $("table").children().length)));
             row.append(createCell($("<button class='delete-stadium btn btn-primary'>Delete</button>")));
             $("table").append(row);
+            j++;
         }
     })
 });
@@ -118,7 +120,6 @@ $(document).on("submit", ".edit-stadium", function (event) {
 
 $(document).on("click", ".delete-stadium", function () {
     let id = $(this).parent().prev().find(".edit-stadium").children().eq(0).children().eq(0).val();
-    alert(id);
     $.ajax({
         type:'DELETE',
         url:'stadiums/'+id

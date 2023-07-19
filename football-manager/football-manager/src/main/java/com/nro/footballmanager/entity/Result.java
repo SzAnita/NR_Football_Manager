@@ -14,13 +14,13 @@ public class Result {
     private Long id;
 
     @Column
-    private int goals_team_one;
+    private Integer goals_team_one;
 
     @Column
-    private int goals_team_two;
+    private Integer goals_team_two;
 
     @Column
-    private boolean over;
+    private Boolean game_over = false;
 
     @OneToOne(mappedBy = "result")
     private Game game;

@@ -30,7 +30,6 @@ public class GameDTO {
         } else {
             gameDTO.setResult(null);
         }
-        gameDTO.setOver(g.getOver());
         return gameDTO;
     }
     public static Game EntityFromDTO(GameDTO gameDTO) {

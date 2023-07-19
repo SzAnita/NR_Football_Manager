@@ -39,11 +39,9 @@ function editButton(data, i) {
     });
     let current_date = new Date();
     current_date.setHours(current_date.getHours()-2);
-    let game_date = new Date(data[i].date);
-    if(game_date < current_date) {
+    //let game_date = new Date(data[i].date);
 
-    }
-    if (data.result != null) {
+    if (data.result.goalsTeamOne != null) {
         input_result1.attr("value", data.result.goalsTeamOne);
     }
     label_result1.append(input_result1);
@@ -54,7 +52,7 @@ function editButton(data, i) {
         'name':'editResult2'+i,
         'placeholder':"Goals for Team 2"
     });
-    if (data.result!=null) {
+    if (data.result.goalsTeamTwo!=null) {
         input_result2.attr("value", data.result.goalsTeamTwo);
     }
     label_result2.append(input_result2);
@@ -88,10 +86,10 @@ $(document).ready(function () {
                 let current_date = new Date();
                 current_date.setHours(current_date.getHours()-2);
                 let game_date = new Date(data[i].date);
-                if(game_date < current_date) {
-                    result = data[i].result.goalsTeamOne + ':' + data[i].result.goalsTeamTwo;
+                if(data[i].result.goalsTeamOne == null && data[i].result.goalsTeamTwo == null) {
+                    result = "-:-"
                 } else {
-                    result = "-:-";
+                    result = data[i].result.goalsTeamOne + ':' + data[i].result.goalsTeamTwo;
                 }
                 let res = createCell(result);
                 res.attr("name", data[i].result.id);
@@ -155,8 +153,8 @@ $(document).on("submit", "#add_game", function (event) {
         'stadium':$("#stadium").val(),
         'date': $("#date").val(),
         'result': {
-            'goalsTeamOne':$("#result1").val(),
-            'goalsTeamTwo':$("#result2").val(),
+            'goalsTeamOne':null,
+            'goalsTeamTwo':null,
         }
     };
 
@@ -381,7 +379,7 @@ $(document).on("click", ".delete-game", function (event){
     })
 })
 
-myInterval = setInterval(check_result, 30000);
+//myInterval = setInterval(check_result, 30000);
 function check_result() {
     $.ajax({
         type:'GET',
