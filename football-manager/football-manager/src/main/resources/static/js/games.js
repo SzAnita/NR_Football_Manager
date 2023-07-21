@@ -105,6 +105,15 @@ $(document).ready(function () {
 });
 
 $(document).on("click", "#createGame", function (event) {
+    if($("label[for=team1]").length > 0) {
+        $("label[for=team1]").remove()
+    }
+    if($("label[for=team2]").length > 0) {
+        $("label[for=team2]").remove()
+    }
+    if($("label[for=stadium]").length > 0) {
+        $("label[for=stadium]").remove()
+    }
     $.ajax({
         type:'GET',
         url:'teams',
@@ -115,10 +124,7 @@ $(document).on("click", "#createGame", function (event) {
             let select2 = $("<select id='team2' name='team2' class='form-select'></select>");
             for (let i = 0; i < data.length; i++) {
                 let option = $("<option>" + data[i].name + "</option>");
-               // alert("test");
-                //alert(select1.html());
                 select2.append(option);
-                //alert(select2.html());
             }
             for (let i = 0; i < data.length; i++) {
                 let option = $("<option>" + data[i].name + "</option>");
@@ -157,7 +163,6 @@ $(document).on("submit", "#add_game", function (event) {
             'goalsTeamTwo':null,
         }
     };
-
     $.when(
         $.ajax({
             type:'GET',
@@ -218,7 +223,6 @@ $(document).on("submit", "#add_game", function (event) {
             success: function (data) {
                 let row = $("<tr></tr>");
                 row.append(createCell(j));
-
                 row.append(createCell($("#team1").val()));
                 let team2 = $("#team2").val();
                 row.append(createCell(team2));
@@ -231,9 +235,6 @@ $(document).on("submit", "#add_game", function (event) {
                 row.append(createCell(editButton(data, $("table").children().length)));
                 row.append(createCell($("<button class='delete-game btn btn-primary'>Delete</button>")));
                 $("table").append(row);
-                $("label[for=team1]").remove();
-                $("label[for=team2]").remove();
-                $("label[for=stadium]").remove();
             }
         });
     })
@@ -241,19 +242,27 @@ $(document).on("submit", "#add_game", function (event) {
 });
 
 $(document).on("click", ".editGame", function (event) {
-    let y = 0;
     let x = $(this).parent().find("form").children().eq(1).attr("for");
     let date = $(this).parent().find("form").children().eq(1);
+    let number = x[x.length-1];
+    if($("label[for=team1"+number+"]").length > 0) {
+        $("label[for=team1"+number+"]").remove()
+    }
+    if($("label[for=team2"+number+"]").length > 0) {
+        $("label[for=team2"+number+"]").remove()
+    }
+    if($("label[for=stadium"+number+"]").length > 0) {
+        $("label[for=stadium"+number+"]").remove()
+    }
     $.when(
         $.ajax({
             type:'GET',
             url:'teams',
             success: function (data) {
-                y = x[x.length-1];
-                let team1 = $("<label for='team1"+y+"'>Team1: </label>");
-                let select1 = $("<select id='team1"+y+"' name='team1"+y+"' class='form-select'></select>");
-                let team2 = $("<label for='team2"+y+"'>Team2: </label>");
-                let select2 = $("<select id='team2"+y+"' name='team2"+y+"' class='form-select'></select>");
+                let team1 = $("<label for='team1"+number+"'>Team1: </label>");
+                let select1 = $("<select id='team1"+number+"' name='team1"+number+"' class='form-select'></select>");
+                let team2 = $("<label for='team2"+number+"'>Team2: </label>");
+                let select2 = $("<select id='team2"+number+"' name='team2"+number+"' class='form-select'></select>");
                 for (let i = 0; i < data.length; i++) {
                     let option = $("<option>" + data[i].name + "</option>");
                     select2.append(option);

@@ -48,20 +48,6 @@ public class PlayerServiceImpl implements PlayerService {
         new_.setId(id);
         playerRepository.save(new_);
         return old;
-        /*Player old = playerRepository.getById(id);
-        if(Objects.nonNull(p.getName()) && !"".equalsIgnoreCase(p.getName())) {
-            old.setName(p.getName());
-        }
-        if(Objects.nonNull(p.getGoalsScored())) {
-            old.setGoalsScored(p.getGoalsScored());
-        }
-        if(Objects.nonNull(p.getRole())) {
-            old.setRole(p.getRole());
-        }
-        if(Objects.nonNull(p.getTeam())) {
-            old.setTeam(p.getTeam());
-        }
-        return playerRepository.save(old);*/
     }
     @Override
     public Optional<Player> getPlayerById(Long id) {

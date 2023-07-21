@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
   <meta charset="UTF-8">
   <title>Teams</title>
@@ -42,23 +42,14 @@
         <h4 class="modal-title">Add Team</h4>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
+      <form id="add_team">
       <div class="modal-body">
-        <fieldset>
-          <form id="add_team">
             <label for="name"><input type="text" id="name" name="name" placeholder="Team name"></label>
-            <label for="goals"><input type="number" id="goals" name="goals" placeholder="Goals scored" value="0"></label>
-            <label for="goalsRec"><input type="number" id="goalsRec" name="goalsRec" placeholder="Goals received" value="0"></label>
-            <label for="victory"><input type="number" id="victory" name="victory" placeholder="Victories" value="0"></label>
-            <label for="draws"><input type="number" id="draws" name="draws" placeholder="Draws" value="0"></label>
-            <label for="defeats"><input type="number" id="defeats" name="defeats" placeholder="Defeats" value="0"></label>
-            <input type="submit" value="Submit">
-          </form>
-        </fieldset>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+        <button type="submit"  class="btn btn-danger" data-bs-dismiss="modal">Save</button>
       </div>
-
+</form>
     </div>
   </div>
 </div>
@@ -80,52 +71,4 @@
   </div>
 </div>
 </body>
-<script>
-  $("#add_team").submit(function (event) {
-    event.preventDefault();
-    let team = {
-      "name":$("#name").val(),
-      "goalsScored":$("#goals").val(),
-      "goalsReceived":$("#goalsRec").val(),
-      "victories":$("#victory").val(),
-      "defeats":$("#defeats").val(),
-      "draws":$("#draws").val()
-    }
-    $.ajax({
-      type: 'POST',
-      url: 'teams',
-      contentType: 'application/json',
-      data: JSON.stringify(team),
-      success: function (data) {
-        let row = $("<tr></tr>")
-        row.append(createCell(j));
-        row.append(createCell($("#name").val()));
-        row.append(createCell($("#goals").val()));
-        row.append(createCell($("#goalsRec").val()));
-        row.append(createCell($("#victory").val()));
-        row.append(createCell($("#draws").val()));
-        row.append(createCell($("#defeats").val()));
-        let points = Number($("#victory").val()*3)+Number($("#draws").val());
-        row.append(createCell(points));
-        let buttonEdit = $('<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editTeam' + j + '">Edit Team</button>\n' +
-                '<div class="modal" id="editTeam' + j + '"><div class="modal-dialog"><div class="modal-content">\n' +
-                '<div class="modal-header"><h4 class="modal-title">Edit Team</h4><button type="button" class="btn-close" data-bs-dismiss="modal"></button>\n' +
-                '</div><div class="modal-body"><form class="edit_team">\n' +
-                '<label for="team_id"><input type="number" hidden="hidden" id="team_id" name="team_id" value="' + data.id + '"></label>' +
-                '<label for="editName'+j+'">Team: <input type="text" id="editName'+j+'" name="name" placeholder="Team name"></label><br>\n' +
-                '<label for="goals">Goals scored: <input type="number" id="editGoals'+j+'" name="goals" placeholder="Goals scored"></label>\n' +
-                '<label for="goalsRec">Goals received: <input type="number" id="editGoalsRec'+j+'" name="goalsRec" placeholder="Goals received" ></label><br>\n' +
-                '<label for="victory">Victories: <input type="number" id="editVictory'+j+'" name="victory" placeholder="Victories"></label><br>\n' +
-                '<label for="draws">Draws: <input type="number" id="editDraws'+j+'" name="draws" placeholder="Draws"></label><br>\n' +
-                '<label for="defeats">Defeats: <input type="number" id="editDefeats'+j+'" name="defeats" placeholder="Defeats"></label><br>\n' +
-                '<input type="submit" value="Submit"></form></div><div class="modal-footer">\n' +
-                '<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button></div>\n' +
-                '</div></div></div>');
-        row.append(createCell(buttonEdit));
-        row.append(createCell($("<button class='deleteTeam btn btn-primary'>Delete</button>")));
-        $("table").append(row);
-      }
-    });
-  });
-</script>
 </html>

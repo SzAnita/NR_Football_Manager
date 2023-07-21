@@ -34,23 +34,20 @@
           <h4 class="modal-title">Add Player</h4>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
-        <div class="modal-body">
-            <form id="add_player">
+        <form id="add_player">
+          <div class="modal-body">
               <label for="name"><input type="text" id="name" name="name" placeholder="Player name"></label>
-              <label for="goals"><input type="number" id="goals" name="goals" placeholder="Goals scored"></label>
               <label for="role" id="createRole"><select class="form-select" id="role">
                 <option>FORWARD</option>
                 <option>MIDFIELDER</option>
                 <option>DEFENDER</option>
                 <option>GOALKEEPER</option>
               </select></label>
-              <input type="submit" value="Submit">
-            </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-        </div>
-
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-danger" data-bs-dismiss="modal">Save</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
@@ -59,9 +56,9 @@
     <tr>
       <th>#</th>
       <th>Name</th>
-      <th>Goals Scored</th>
       <th>Role</th>
       <th>Team</th>
+      <th>Goals Scored</th>
       <th></th>
       <th></th>
     </tr>
@@ -69,64 +66,4 @@
   </div>
 </div>
 </body>
-<script>
-  $("#add_player").submit(function (event) {
-    event.preventDefault();
-    let row = $("<tr></tr>")
-    row.append(createCell(j));
-    row.append(createCell($("#name").val()));
-    row.append(createCell($("#goals").val()));
-    row.append(createCell($("#role").val()));
-    row.append(createCell($("#team").val()));
-    let data = {
-      'id':k,
-      'name':$("#name").val(),
-      'goalsScored':$("#goals").val(),
-      'role':$("#role").val(),
-      'team':$("#team").val()
-    }
-    let buttonEdit = editButton(data, $("table").children().length);
-    row.append(createCell(buttonEdit));
-    row.append(createCell($("<button class='delete-player btn btn-primary'>Delete</button>")));
-    $("table").append(row);
-    let team = $("#team").val()
-    let player = {
-      "name": $("#name").val(),
-      "goalsScored": $("#goals").val(),
-      "role": $("#role").val(),
-      "team":team
-    };
-    $.ajax({
-      type:'GET',
-      url: 'teams?name='+team,
-      success(data) {
-            player.team = {
-              'id':data.id,
-              'name':data.name,
-              'goalsScored':data.goalsScored,
-              'goalsReceived':data.goalsReceived,
-              'victories':data.victories,
-              'draws':data.draws,
-              'defeats': data.defeats
-            };
-
-        alert("Id:"+player.team.id);
-        alert("Name:"+player.team.name);
-        alert(player.team.goalsScored);
-        alert(player.team.goalsReceived);
-        alert(player.team.victories);
-        alert("Draws:"+player.team.draws);
-        alert(player.team.defeats);
-        $.ajax({
-          type:'POST',
-          url:'players',
-          contentType:'application/json',
-          data: JSON.stringify(player)
-        });
-        $("label[for=team]").remove();
-      }
-    });
-    j++;
-  });
-</script>
 </html>

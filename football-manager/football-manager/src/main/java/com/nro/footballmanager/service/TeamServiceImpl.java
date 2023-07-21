@@ -54,25 +54,6 @@ public class TeamServiceImpl implements TeamService{
         old.setDefeats(t.getDefeats());
         teamRepository.save(TeamDTO.EntityFromTeamDTO(old));
         return old;
-        /*Team team = teamRepository.findById(tid).get();
-        if(Objects.nonNull(t.getName()) && !"".equalsIgnoreCase(t.getName())) {
-            team.setName(t.getName());
-        }
-        team.setGoalsScored(t.getGoalsScored());
-        team.setGoalsReceived(t.getGoalsReceived());
-        team.setVictories(t.getVictories());
-        team.setDraws(t.getDraws());
-        team.setDefeats(t.getDefeats());
-        if(Objects.nonNull(t.getPlayers())) {
-            team.setPlayers(t.getPlayers());
-        }
-        if(Objects.nonNull(t.getGames_as_one())) {
-            team.setGames_as_one(t.getGames_as_one());
-        }
-        if(Objects.nonNull(t.getGames_as_two())) {
-            team.setGames_as_two(t.getGames_as_two());
-        }
-        return teamRepository.save(team);*/
     }
     @Override
     public void deleteTeamById(Long tid) {

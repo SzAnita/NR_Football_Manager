@@ -38,8 +38,8 @@ public class PlayerController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("players/name/{name}")
-    public ResponseEntity<List<PlayerDTO>> getPlayerByName(@PathVariable("name") String name) {
+    @GetMapping(value = "/players", params = "name")
+    public ResponseEntity<List<PlayerDTO>> getPlayerByName(@RequestParam String name) {
         List<Optional<Player>> players = playerService.getPlayersByName(name);
         List<PlayerDTO> existPlayers = new ArrayList<>();
         for (Optional<Player> p: players) {
