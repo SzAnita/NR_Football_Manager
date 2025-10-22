@@ -1,0 +1,8 @@
+input {
+    width: 200px;
+    max-width: 260px;
+}
+
+label {
+    width: 130px;
+}

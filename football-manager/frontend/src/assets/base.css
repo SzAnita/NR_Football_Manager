@@ -1,0 +1,142 @@
+html, body, #root {
+    width: 100%;
+}
+
+div#root {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.navbar {
+    background-color: rgba(161, 127, 90, 0.9);
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    font-size: clamp(0.9rem, 2vw, 1.5rem);
+    color: aliceblue;
+    container-type: inline-size;
+    padding: 0;
+}
+
+a.ul-navbar {
+    list-style-type: none;
+    display: flex;
+    padding: 0;
+
+}
+
+.ul-navbar {
+    display: flex;
+    flex-direction: row;
+    list-style-type: none;
+}
+
+.navbar > a {
+    text-decoration: none;
+    color: aliceblue;
+    padding: 10px;
+    font-weight: 600;
+    margin: 10px 0;
+}
+
+.ul-navbar li {
+    margin: 10px;
+}
+
+.ul-navbar a {
+    text-decoration: none;
+    color: aliceblue;
+}
+
+.content {
+    inline-size: 60%;
+    min-width: fit-content;
+    border-radius: 0.5em;
+    background-color: burlywood;
+    margin: 0 auto;
+    padding-bottom: 0;
+    height: 100%;
+}
+
+button.delete, button.edit, button.create {
+    font-size: 1rem;
+    font-weight: 600;
+    white-space: nowrap;
+    width: auto;
+}
+
+table, th, td {
+    border: 0.25em solid cornsilk;
+    text-align: center;
+    margin: 15px;
+}
+
+th {
+    font-size: 1.25rem;
+}
+
+th {
+    padding: 1em;
+}
+
+td {
+    padding: 0.5em;
+    font-size: 1rem;
+    font-weight: 525;
+}
+
+tr:nth-child(even) {
+    background-color: #bae1fa;
+}
+
+tr:nth-child(odd) {
+    background-color: #8cb2f8;
+}
+
+tr:nth-child(1) {
+    background-color: #e1bfa9;
+}
+
+button {
+    margin: 10px;
+}
+
+.table {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    overflow-x: scroll;
+}
+
+label {
+    white-space: nowrap;
+    width: 100px;
+    margin-right: 5px;
+}
+
+div.modal-body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+select {
+    background-color: white;
+    border-radius: 5px;
+    padding: 3px;
+    width: 115px;
+}
+
+input {
+    border-radius: 5px;
+    padding: 3px;
+    width: 115px;
+}
+
+input {
+    max-width: 115px;
+}

@@ -1,0 +1,7 @@
+.content.home {
+    color: #0d5ae6;
+}
+
+.content.home > h1 {
+    font-weight: 600;
+}
