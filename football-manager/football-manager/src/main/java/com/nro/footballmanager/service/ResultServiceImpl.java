@@ -1,8 +1,6 @@
 package com.nro.footballmanager.service;
 
-import com.nro.footballmanager.entity.Player;
 import com.nro.footballmanager.entity.Result;
-import com.nro.footballmanager.entity.dto.PlayerDTO;
 import com.nro.footballmanager.entity.dto.ResultDTO;
 import com.nro.footballmanager.repository.ResultRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +26,8 @@ public class ResultServiceImpl implements ResultService{
     public List<ResultDTO> findAll() {
         List<ResultDTO> resultDTOs = new ArrayList<ResultDTO>();
         List<Result> results = resultRepository.findAll();
-        for(int i = 0; i<results.size(); i++) {
-            resultDTOs.add(ResultDTO.ResultToResultDTO(results.get(i)));
+        for (Result result : results) {
+            resultDTOs.add(ResultDTO.ResultToResultDTO(result));
         }
         return resultDTOs;
     }

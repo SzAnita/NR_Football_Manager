@@ -1,6 +1,5 @@
 package com.nro.footballmanager.controller;
 
-import com.nro.footballmanager.entity.Player;
 import com.nro.footballmanager.entity.Result;
 import com.nro.footballmanager.entity.dto.ResultDTO;
 import com.nro.footballmanager.service.ResultService;

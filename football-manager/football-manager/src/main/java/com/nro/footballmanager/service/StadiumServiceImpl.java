@@ -25,8 +25,8 @@ public class StadiumServiceImpl implements StadiumService{
     public List<StadiumDTO> findAll() {
         List<StadiumDTO> stadiumDTOs = new ArrayList<StadiumDTO>();
         List<Stadium> stadiums = stadiumRepository.findAll();
-        for(int i = 0; i<stadiums.size(); i++) {
-            stadiumDTOs.add(StadiumDTO.EntityToDTO(stadiums.get(i)));
+        for (Stadium stadium : stadiums) {
+            stadiumDTOs.add(StadiumDTO.EntityToDTO(stadium));
         }
         return stadiumDTOs;
     }

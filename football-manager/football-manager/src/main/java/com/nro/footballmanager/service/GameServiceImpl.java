@@ -1,7 +1,6 @@
 package com.nro.footballmanager.service;
 
 import com.nro.footballmanager.entity.Game;
-import com.nro.footballmanager.entity.Stadium;
 import com.nro.footballmanager.entity.dto.GameDTO;
 import com.nro.footballmanager.entity.dto.ResultDTO;
 import com.nro.footballmanager.entity.dto.StadiumDTO;
@@ -31,8 +30,8 @@ public class GameServiceImpl implements GameService {
     public List<GameDTO> findAll() {
         List<GameDTO> gameDTOs = new ArrayList<GameDTO>();
         List<Game> games = gameRepository.findAll();
-        for(int i = 0; i<games.size(); i++) {
-            gameDTOs.add(GameDTO.EntityToDTO(games.get(i)));
+        for (Game game : games) {
+            gameDTOs.add(GameDTO.EntityToDTO(game));
         }
         return gameDTOs;
     }
@@ -53,7 +52,7 @@ public class GameServiceImpl implements GameService {
         Game new_game = GameDTO.EntityFromDTO(old);
         new_game.setId(id);
         Game saved = gameRepository.save(new_game);
-        return old;
+        return GameDTO.EntityToDTO(saved);
     }
 
     @Override

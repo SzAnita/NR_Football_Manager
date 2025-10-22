@@ -1,8 +1,6 @@
 package com.nro.footballmanager.service;
 
-import com.nro.footballmanager.entity.Player;
 import com.nro.footballmanager.entity.Team;
-import com.nro.footballmanager.entity.dto.PlayerDTO;
 import com.nro.footballmanager.entity.dto.TeamDTO;
 import com.nro.footballmanager.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +25,8 @@ public class TeamServiceImpl implements TeamService{
     public List<TeamDTO> findAll() {
         List<TeamDTO> teamDTOs = new ArrayList<TeamDTO>();
         List<Team> teams = teamRepository.findAll();
-        for(int i = 0; i<teams.size(); i++) {
-            teamDTOs.add(TeamDTO.EntityToTeamDTO(teams.get(i)));
+        for (Team team : teams) {
+            teamDTOs.add(TeamDTO.EntityToTeamDTO(team));
         }
         return teamDTOs;
     }
