@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ResultService {
-    ResultDTO saveResult(Result r);
+    ResultDTO saveResult(ResultDTO r);
     List<ResultDTO> findAll();
     Optional<Result> findResultById(Long id);
     ResultDTO updateResult(Result r, Long id);

@@ -17,8 +17,8 @@ public class StadiumController {
     private StadiumService stadiumService;
 
     @PostMapping("/stadiums")
-    public ResponseEntity<StadiumDTO> saveStadium(@RequestBody Stadium s) {
-        return new ResponseEntity<>(stadiumService.saveStadium(s), HttpStatus.OK);
+    public ResponseEntity<StadiumDTO> saveStadium(@RequestBody StadiumDTO stadium) {
+        return new ResponseEntity<>(stadiumService.saveStadium(stadium), HttpStatus.OK);
     }
 
     @GetMapping("/stadiums")
@@ -52,7 +52,7 @@ public class StadiumController {
             StadiumDTO persistedStadium = stadiumService.updateStadium(StadiumDTO.EntityFromDTO(s), id);
             return new ResponseEntity<>(persistedStadium, HttpStatus.OK);
         }
-        return new ResponseEntity<>(stadiumService.saveStadium(StadiumDTO.EntityFromDTO(s)), HttpStatus.OK);
+        return new ResponseEntity<>(stadiumService.saveStadium(s), HttpStatus.OK);
     }
 
     @DeleteMapping("/stadiums/{id}")

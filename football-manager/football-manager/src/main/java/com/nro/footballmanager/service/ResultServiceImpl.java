@@ -19,8 +19,9 @@ public class ResultServiceImpl implements ResultService{
     private ResultRepository resultRepository;
 
     @Override
-    public ResultDTO saveResult(Result r) {
-        return ResultDTO.ResultToResultDTO(resultRepository.save(r));
+    public ResultDTO saveResult(ResultDTO r) {
+        Result savedResult = resultRepository.save(ResultDTO.ResultFromResultDTO(r));
+        return ResultDTO.ResultToResultDTO(savedResult);
     }
 
     @Override

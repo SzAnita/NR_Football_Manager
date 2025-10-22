@@ -19,8 +19,8 @@ public class TeamServiceImpl implements TeamService{
     private TeamRepository teamRepository;
     @Override
     public TeamDTO saveTeam(TeamDTO t) {
-        teamRepository.save(TeamDTO.EntityFromTeamDTO(t));
-        return t;
+        Team savedTeam = teamRepository.save(TeamDTO.EntityFromTeamDTO(t));
+        return TeamDTO.EntityToTeamDTO(savedTeam);
     }
 
     @Override

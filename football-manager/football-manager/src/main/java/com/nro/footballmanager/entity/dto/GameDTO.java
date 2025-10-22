@@ -1,6 +1,7 @@
 package com.nro.footballmanager.entity.dto;
 
 import com.nro.footballmanager.entity.Game;
+import com.nro.footballmanager.entity.Result;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -40,7 +41,13 @@ public class GameDTO {
         g.setStadium(StadiumDTO.EntityFromDTO(gameDTO.getStadium()));
         g.setDate(gameDTO.getDate());
         if(Objects.nonNull(gameDTO.getResult())) {
-            g.setResult(ResultDTO.ResultFromResultDTO(gameDTO.getResult()));
+            ResultDTO resultDTO = gameDTO.getResult();
+            Result result = ResultDTO.ResultFromResultDTO(resultDTO);
+            if (gameDTO.getDate().isBefore(LocalDateTime.now())) {
+                result.setGame_over(true);
+            }
+            g.setResult(result);
+
         } else {
             g.setResult(null);
         }

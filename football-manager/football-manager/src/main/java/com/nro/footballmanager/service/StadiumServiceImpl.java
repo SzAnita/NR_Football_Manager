@@ -16,9 +16,9 @@ public class StadiumServiceImpl implements StadiumService{
     @Autowired
     private StadiumRepository stadiumRepository;
     @Override
-    public StadiumDTO saveStadium(Stadium s) {
-
-        return StadiumDTO.EntityToDTO(stadiumRepository.save(s));
+    public StadiumDTO saveStadium(StadiumDTO s) {
+        Stadium savedStadium = stadiumRepository.save(StadiumDTO.EntityFromDTO(s));
+        return StadiumDTO.EntityToDTO(savedStadium);
     }
 
     @Override

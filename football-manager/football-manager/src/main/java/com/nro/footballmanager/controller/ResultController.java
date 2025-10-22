@@ -17,8 +17,8 @@ public class ResultController {
     @Autowired
     private ResultService resultService;
     @PostMapping("/results")
-    public ResponseEntity<ResultDTO> saveResult(@RequestBody Result result) {
-        return new ResponseEntity<>(resultService.saveResult(result), HttpStatus.OK);
+    public ResponseEntity<ResultDTO> saveResult(@RequestBody ResultDTO resultDTO) {
+        return new ResponseEntity<>(resultService.saveResult(resultDTO), HttpStatus.OK);
     }
     @GetMapping("/results")
     public ResponseEntity<List<ResultDTO>> getResults() {
@@ -34,13 +34,13 @@ public class ResultController {
     }
 
     @PutMapping("/results/{id}")
-    public ResponseEntity<ResultDTO> updateResult(@RequestBody Result result, @PathVariable("id") Long id) {
+    public ResponseEntity<ResultDTO> updateResult(@RequestBody ResultDTO resultDTO, @PathVariable("id") Long id) {
         Optional<Result> old = resultService.findResultById(id);
         if(old.isPresent()) {
-            ResultDTO persistedResult = resultService.updateResult(result, id);
+            ResultDTO persistedResult = resultService.updateResult(ResultDTO.ResultFromResultDTO(resultDTO), id);
             return new ResponseEntity<>(persistedResult, HttpStatus.OK);
         }
-        return new ResponseEntity<>(resultService.saveResult(result), HttpStatus.OK);
+        return new ResponseEntity<>(resultService.saveResult(resultDTO), HttpStatus.OK);
     }
 
     @DeleteMapping("/results/{id}")

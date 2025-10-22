@@ -23,8 +23,8 @@ public class GameServiceImpl implements GameService {
     @Override
     public GameDTO saveGame(GameDTO g) {
         Game new_game = GameDTO.EntityFromDTO(g);
-        gameRepository.save(new_game);
-        return g;
+        Game saved_game = gameRepository.save(new_game);
+        return GameDTO.EntityToDTO(saved_game);
     }
 
     @Override
@@ -41,6 +41,7 @@ public class GameServiceImpl implements GameService {
     public Optional<Game> findGameById(Long id) {
         return gameRepository.findById(id);
     }
+
     @Override
     public GameDTO updateGame(Game g, Long id) {
         GameDTO old = GameDTO.EntityToDTO(gameRepository.findById(id).get());
